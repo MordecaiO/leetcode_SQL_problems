@@ -47,4 +47,16 @@ Users 1 and 2 had 2 calls and the total duration is 70 (59 + 11).
 Users 1 and 3 had 1 call and the total duration is 20.
 Users 3 and 4 had 4 calls and the total duration is 999 (100 + 200 + 200 + 499). 
 
+# Write your MySQL query statement below
+
+WITH 
+unique_calls AS
+( SELECT *, ( POWER(from_id,2) + POWER(to_id,2) ) as callers_id  FROM calls 
+   )  
+  
+SELECT from_id AS person1, to_id AS person2,  COUNT(*) AS call_count, SUM(duration) AS total_duration
+FROM unique_calls 
+GROUP BY callers_id
+
+
 
