@@ -1,4 +1,4 @@
-
+/*
 /+-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -46,7 +46,7 @@ Explanation:
 Users 1 and 2 had 2 calls and the total duration is 70 (59 + 11).
 Users 1 and 3 had 1 call and the total duration is 20.
 Users 3 and 4 had 4 calls and the total duration is 999 (100 + 200 + 200 + 499). 
-
+*/
 # Write your MySQL query statement below
 
 WITH 
