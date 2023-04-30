@@ -44,3 +44,23 @@ Output:
 | 2020-05-04 | -1           |
 +------------+--------------+
 */
+
+WITH total_apples_sold AS 
+  ( SELECT sale_date, sold_num, fruit
+    FROM sales 
+    WHERE fruit = "apples"
+    GROUP BY sale_date
+  ) 
+  , total_oranges_sold AS
+  ( SELECT  sale_date, sold_num, fruit
+    FROM sales 
+    WHERE fruit = "oranges"
+    GROUP BY sale_date
+  ) 
+
+  SELECT sales.sale_date, 
+   (total_apples_sold.sold_num - total_oranges_sold.sold_num) AS diff
+  FROM sales 
+  LEFT JOIN total_apples_sold ON sales.sale_date = total_apples_sold.sale_date
+  LEFT JOIN total_oranges_sold ON sales.sale_date = total_oranges_sold.sale_date
+  GROUP BY sale_date
