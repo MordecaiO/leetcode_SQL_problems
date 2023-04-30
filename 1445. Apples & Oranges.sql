@@ -64,3 +64,8 @@ WITH total_apples_sold AS
   LEFT JOIN total_apples_sold ON sales.sale_date = total_apples_sold.sale_date
   LEFT JOIN total_oranges_sold ON sales.sale_date = total_oranges_sold.sale_date
   GROUP BY sale_date
+------------------------------BETTER SOLUTION-----------------------------
+SELECT sale_date, SUM(CASE when fruit='apples' THEN sold_num ELSE -sold_num END) AS diff
+FROM sales
+GROUP BY sale_date
+
