@@ -40,3 +40,17 @@ Output:
 | 2          | 2         | 95    |
 | 3          | 3         | 82    |
 +------------+-----------+-------+*/
+
+SELECT student_id, MIN(course_id) AS course_id, grade 
+FROM enrollments 
+WHERE (student_id, grade)
+IN (
+SELECT
+    student_id, MAX(grade) AS 'grade'
+    FROM enrollments 
+    GROUP BY student_id
+) 
+GROUP BY student_id
+ORDER BY student_id
+
+
