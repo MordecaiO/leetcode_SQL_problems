@@ -65,3 +65,16 @@ Output:
 +--------------+----------+---------------+-------+
 Explanation: 
 As shown, you need to find the value of each boolean expression in the table using the variables table. */
+# Write your MySQL query statement below
+SELECT e.left_operand, e.operator, e.right_operand,
+
+CASE 
+WHEN operator='>' THEN IF(left_table.value > right_table.value, 'true', 'false')
+WHEN operator='=' THEN IF(left_table.value = right_table.value, 'true', 'false')
+WHEN operator='<' THEN IF(left_table.value < right_table.value, 'true', 'false')
+ELSE NULL
+END AS value
+FROM expressions e
+LEFT JOIN variables left_table ON e.left_operand = left_table.name 
+LEFT JOIN variables right_table ON e.right_operand = right_table.name
+
