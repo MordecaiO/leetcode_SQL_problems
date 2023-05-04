@@ -37,3 +37,11 @@ Output:
 +------+
 | John |
 +------+*/
+
+# Write your MySQL query statement below
+SELECT a.name FROM employee a
+LEFT JOIN 
+(SELECT managerId, COUNT(managerId) AS direct_reports FROM employee
+ GROUP BY managerId) b 
+ ON a.id = b.managerId 
+ WHERE b.direct_reports >= 5
