@@ -68,3 +68,10 @@ User one is friend with users 2, 3, 4 and 6.
 Suggested pages are 23 from user 2, 24 from user 3, 56 from user 3 and 33 from user 6.
 Page 77 is suggested from both user 2 and user 3.
 Page 88 is not suggested because user 1 already likes it.*/
+
+SELECT DISTINCT page_id AS recommended_page FROM likes WHERE user_id IN (
+   SELECT CASE WHEN user1_id = 1 THEN user2_id ELSE user1_id END
+   AS friends FROM friendship WHERE user1_id = 1 OR user2_id = 1 
+) AND page_id NOT IN (
+    SELECT page_id FROM likes WHERE user_id = 1
+)
