@@ -41,3 +41,14 @@ Output:
 +-----------+
 Explanation: 
 Only the player with id 1 logged back in after the first day he had logged in so the answer is 1/3 = 0.33*/
+
+WITH min_log AS (SELECT player_id, MIN(event_date) AS first_log_on 
+FROM Activity 
+GROUP BY player_id)
+
+SELECT ROUND (
+COUNT(a.player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2)
+AS fraction 
+FROM Activity a INNER JOIN min_log ml
+ON a.player_id = ml.player_id 
+AND ml.first_log_on = DATE_SUB(a.event_date, INTERVAL 1 DAY) 
