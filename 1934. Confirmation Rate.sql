@@ -73,3 +73,23 @@ User 6 did not request any confirmation messages. The confirmation rate is 0.
 User 3 made 2 requests and both timed out. The confirmation rate is 0.
 User 7 made 3 requests and all were confirmed. The confirmation rate is 1.
 User 2 made 2 requests where one was confirmed and the other timed out. The confirmation rate is 1 / 2 = 0.5.*/
+
+ WITH total_messages AS (
+       SELECT user_id , COUNT(user_id) AS total_messages FROM confirmations group by user_id
+   ),
+
+   confirmed_messages AS (
+       SELECT user_id , COUNT(user_id) AS confirmed_messages FROM confirmations WHERE action = 'confirmed'
+       group by user_id
+   )
+
+   SELECT s.user_id, ROUND(
+       CASE 
+       WHEN (cm.confirmed_messages/ tm.total_messages) IS NULL THEN 0
+       ELSE (cm.confirmed_messages/ tm.total_messages)
+       END
+    ,2) AS confirmation_rate
+    FROM signups s 
+   LEFT JOIN total_messages tm ON s.user_id = tm.user_id 
+   LEFT JOIN confirmed_messages cm ON s.user_id = cm.user_id
+
