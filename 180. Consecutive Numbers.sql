@@ -37,3 +37,15 @@ Output:
 | 1               |
 +-----------------+
 Explanation: 1 is the only number that appears consecutively for at least three times.*/
+
+
+# Write your MySQL query statement below
+select distinct num as ConsecutiveNums from (
+  select n1.id , n1.num, n2.num as 2nd_num, n3.num as 3rd_num , 
+case when n1.num = n2.num AND n2.num = n3.num then true else false end as consec
+from logs n1
+left join logs n2 on n1.id = (n2.id + 1) 
+left join logs n3 on n2.id = (n3.id +1)
+) logs_cte
+where consec = true
+
