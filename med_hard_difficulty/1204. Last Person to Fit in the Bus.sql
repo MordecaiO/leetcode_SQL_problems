@@ -52,4 +52,19 @@ Explanation: The folowing table is ordered by the turn for simplicity.
 | 6    | 1  | Winston   | 500    | ___          |
 +------+----+-----------+--------+--------------+*/
 
+WITH cum_weight AS (
+  SELECT q1.turn, q1.person_name, q1.person_id, q1.weight, 
+  SUM(q2.weight) AS cum_weight FROM Queue q1
+  INNER JOIN Queue q2 ON q1.turn >= q2.turn 
+  GROUP BY q1.turn, q1.person_id, q1.weight
+  ORDER BY q1.turn
+) 
+, 
+below_limit AS (
+  SELECT person_name FROM cum_weight 
+  WHERE cum_weight <= 1000 
+  ORDER BY turn DESC
+)
 
+SELECT * FROM below_limit 
+LIMIT 1
