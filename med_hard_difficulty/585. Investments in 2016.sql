@@ -47,3 +47,17 @@ The tiv_2015 value 10 is the same as the third and fourth records, and its locat
 
 The second record does not meet any of the two criteria. Its tiv_2015 is not like any other policyholders and its location is the same as the third record, which makes the third record fail, too.
 So, the result is the sum of tiv_2016 of the first and last record, which is 45.*/
+
+SELECT ROUND(SUM(tiv_2016),2) AS tiv_2016 
+FROM insurance 
+WHERE tiv_2015 in (
+    SELECT tiv_2015 FROM insurance
+    group by tiv_2015
+    having COUNT(tiv_2015) > 1
+) AND CONCAT(lat,lon) NOT in
+(
+    SELECT CONCAT(lat,lon) as loc
+    from insurance 
+    group by loc 
+    HAVING COUNT(CONCAT(lat,lon)) > 1
+) 
