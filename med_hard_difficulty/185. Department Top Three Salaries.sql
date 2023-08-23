@@ -73,3 +73,36 @@ In the Sales department:
 - Henry earns the highest salary
 - Sam earns the second-highest salary
 - There is no third-highest salary as there are only two employees*/
+
+WITH ranges AS (
+    SELECT e.departmentId,  
+(
+   SELECT MAX(salary) FROM (
+    SELECT DISTINCT salary FROM employee
+    WHERE departmentId = e.departmentId 
+    ORDER BY salary DESC
+    LIMIT 3) top_3 
+) AS max_top_3,
+(
+   SELECT MIN(salary) FROM (
+    SELECT DISTINCT salary FROM employee
+    WHERE departmentId = e.departmentId 
+    ORDER BY salary DESC
+    LIMIT 3) top_3 
+) AS min_top_3
+FROM employee e
+), 
+
+depart_ranges AS (
+    SELECT d.name, r.max_top_3, r.min_top_3, 
+    r.departmentId FROM department d 
+    LEFT JOIN ranges r ON d.id = r.departmentId
+    GROUP BY d.name
+)
+
+SELECT dr.name AS Department, e.name AS Employee, e.salary 
+AS Salary FROM employee e 
+LEFT JOIN depart_ranges dr 
+ON e.departmentId = dr.departmentId 
+WHERE e.salary <= dr.max_top_3 AND e.salary >= dr.min_top_3 
+
